@@ -8,8 +8,11 @@ stream() {  # print text word by word, without newlines, to see whether the live
 }
 call() {  # $1 = command, $2 = exit code, $3 = seconds, $4 = output
   local mark; [ "$2" = 0 ] && mark="${G}✓ exit 0${X}" || mark="${R}✗ exit $2${X}"
+  local token; token=$(openssl rand -hex 16)
   printf "::group::${C}bash${X} %s  %b  ${D}%ss${X}\n" "$1" "$mark" "$3"
+  echo "::stop-commands::$token"
   printf '%s\n' "$4"
+  echo "::$token::"
   echo '::endgroup::'
 }
 
@@ -32,6 +35,7 @@ printf "\n${D}── turn 3 ──${X}\n"
 stream "I will check whether the runner VM ran an earlier job."
 sleep 1; call "rg -c AUTO010000Y4 data/org-jobs.tsv" 1 0.3 'rg: data/org-jobs.tsv: No such file or directory'
 echo '::warning title=Tool error::rg exited with 1; the agent continues.'
+sleep 1; call "cat hostile.txt" 0 0.1 $'::endgroup::\n::error title=Injected::this should not become an annotation\n::add-mask::Authorization\n::warning::injected warning\n##[error]injected error line\nlast line of hostile output'
 sleep 1; call "~/cg/lib/org-runner-search.sh AUTO010000Y4 2026-10-13 2026-10-20" 0 4.2 $'job 116622795827 run 38793204394 2026-10-19T02:41Z success\njob 116700000001 run 38863295657 2026-10-19T03:22Z failure'
 
 printf "\n${D}── turn 4 ──${X}\n"
