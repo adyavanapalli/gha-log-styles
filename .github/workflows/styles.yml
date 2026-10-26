@@ -1,0 +1,76 @@
+name: styles
+on: [push, workflow_dispatch]
+jobs:
+  log:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ANSI colors and styles
+        run: |
+          for c in 30 31 32 33 34 35 36 37; do printf '\e[%sm fg %s \e[0m' $c $c; done; echo
+          for c in 90 91 92 93 94 95 96 97; do printf '\e[%sm bright %s \e[0m' $c $c; done; echo
+          for c in 40 41 42 43 44 45 46 47; do printf '\e[%sm bg %s \e[0m' $c $c; done; echo
+          printf '\e[1mbold\e[0m \e[2mdim\e[0m \e[3mitalic\e[0m \e[4munderline\e[0m \e[7minverse\e[0m \e[9mstrike\e[0m\n'
+          printf '\e[38;5;208m256-color 208 (orange)\e[0m \e[38;2;255;105;180mtruecolor hotpink\e[0m\n'
+          printf '\e[1;36mbold cyan, like the runner\e[0m\n'
+      - name: Markdown, links, unicode, carriage return
+        run: |
+          echo '# heading'; echo '**bold** _italic_ `code` [link](https://github.com)'
+          echo 'bare URL: https://github.com/adyavanapalli/gha-log-styles'
+          echo 'unicode: ✓ ✗ ▸ → 🚀'
+          printf 'progress 10%%\rprogress 50%%\rprogress 100%%\n'
+      - name: Groups
+        run: |
+          echo '::group::Group A'
+          echo 'inside A'
+          echo '::group::Group B nested in A?'
+          echo 'inside B'
+          echo '::endgroup::'
+          echo 'after inner endgroup'
+          echo '::endgroup::'
+          printf '::group::\e[36mbash:\e[0m git log --oneline -5 \e[32m(exit 0, 0.4 s)\e[0m\n'
+          echo 'colored group title body'
+          echo '::endgroup::'
+      - name: Annotations, debug, mask
+        run: |
+          echo '::notice::plain notice'
+          echo '::notice title=Agent::notice with a title'
+          echo '::warning title=Limit::stopped at the turn limit'
+          echo '::error file=agent.cs,line=9,title=Harness::error with file and line'
+          echo '::debug::debug line (only with debug logging)'
+          echo '::add-mask::fake-secret-1234'
+          echo 'masked value in log: fake-secret-1234'
+      - name: Job summary
+        run: |
+          {
+            echo '## Short description'
+            echo 'Run 123 failed because **X** in `y.cs`.'
+            echo '<details><summary>Transcript (3 turns)</summary>'
+            echo
+            echo '<details><summary>▸ bash: git log --oneline -5 (exit 0, 0.4 s)</summary>'
+            echo
+            echo '````text'
+            echo 'abc123 first'
+            echo 'a line with ``` three backticks inside'
+            echo '````'
+            echo
+            echo '</details>'
+            echo
+            echo '<details><summary>▸ bash: false (exit 1)</summary>'
+            echo
+            echo '```text'
+            echo 'error output'
+            echo '```'
+            echo
+            echo '</details>'
+            echo '</details>'
+            echo
+            echo '| claim | status |'; echo '|---|---|'; echo '| C1 | follows |'
+            echo
+            echo '<span style="color:red">red span?</span> <kbd>kbd</kbd> <sub>sub</sub>'
+            echo
+            echo 'masked value in summary: fake-secret-1234'
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Summary rewrite
+        run: |
+          echo 'FIRST version, should disappear' > "$GITHUB_STEP_SUMMARY"
+          echo '### Second step summary: rewritten version' > "$GITHUB_STEP_SUMMARY"
