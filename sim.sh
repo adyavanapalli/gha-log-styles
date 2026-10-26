@@ -9,7 +9,8 @@ stream() {  # print text word by word, without newlines, to see whether the live
 call() {  # $1 = command, $2 = exit code, $3 = seconds, $4 = output
   local mark; [ "$2" = 0 ] && mark="${G}✓ exit 0${X}" || mark="${R}✗ exit $2${X}"
   printf "::group::${C}bash${X} %s  %b  ${D}%ss${X}\n" "$1" "$mark" "$3"
-  while IFS= read -r line; do printf "${D}│${X} %s\n" "$line"; done <<< "$4"
+  local zw=$'\u200b'
+  while IFS= read -r line; do printf "${D}│${X} %s\n" "${line//'##['/##${zw}[}"; done <<< "$4"
   echo '::endgroup::'
 }
 
