@@ -1,0 +1,9 @@
+name: sim
+on: workflow_dispatch
+jobs:
+  agent:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: base-build-investigator
+        run: ./sim.sh
