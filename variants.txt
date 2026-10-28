@@ -1,0 +1,10 @@
+v1 zwsp after ##: abc ##​[error]x
+v2 zwsp between #: abc #​#[error]x
+v3 word joiner after ##: abc ##⁠[error]x
+[0mv4 reset code first + zwsp: abc ##​[error]x
+[0mv5 reset code first, no zwsp: abc ##[error]x
+[90m│[0m v6 gray gutter + zwsp: abc ##​[error]x
+​v7 zwsp first + zwsp: abc ##​[error]x
+v8 fullwidth bracket: abc ##［error]x
+v9 zwsp before ##: abc ​##[error]x
+[37mv10 white color first + zwsp: abc ##​[error]x[0m
