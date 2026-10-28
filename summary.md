@@ -1,6 +1,4 @@
-**The kernel is Linux 7.0.0-38-generic, and the date (UTC) is 2026-10-28.**
+> [!CAUTION]
+> The agent stopped: The model stopped with the reason max_tokens.
 
-- `uname -sr`
-- `date -u +%F`
-
-<sub>loop-test · claude-sonnet-5.5, effort low · 2 turns · 2 tool calls · 0m 02s</sub>
+<sub>loop-test · claude-sonnet-5.5, effort low · 1 turns · 1 tool calls · 0m 05s</sub>
