@@ -1,0 +1,8 @@
+name: escape
+on: workflow_dispatch
+jobs:
+  print:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - run: cat escape-test.txt
