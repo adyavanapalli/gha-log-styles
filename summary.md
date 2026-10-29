@@ -1,24 +1,47 @@
-The checkout failed because a reused runner VM still had a global `Authorization` header from the previous job. Remove the `--global` extraheader in `template-build.yml`.
+# Summary
 
-The `Checkout Base repository` step failed with HTTP 400.[^1] GitHub rejected the request because it contained two `Authorization` headers.[^1] The runner VM had run another job just before this one.[^2] That job's step 29 set the header with `git config --global`.[^3]
+The checkout failed.
 
-[^1]: `gh run view 38863295657 --log-failed | tail -20`
+# Details
+
+The step failed with HTTP 400.[^1] GitHub saw two headers.[^2] Both values printed.[^3][^1] Backticks survive.[^4] Other tools show their input.[^5]
+
+<sub>footer</sub>
+
+[^1]: Call 1: `gh run view 1 --log-failed | tail -2`
+
+    ```text
+    fatal: error: 400
+    ```
+
+[^2]: Call 1: `gh run view 1 --log-failed | tail -2`
 
     ```text
     remote: Duplicate header: "Authorization"
-    fatal: unable to access 'https://github.com/payerpath/Base/': The requested URL returned error: 400
+    fatal: error: 400
     ```
 
-[^2]: `gh api repos/payerpath/Base/actions/jobs/116622795827 --jq .runner_name`
+[^3]: Call 2:
+
+    ```bash
+    for f in a b; do
+      echo "$f"
+    done
+    ```
 
     ```text
-    Ue2PrSHDAUTO01-AUTO010000Y4-20261015-115635
+    a
+    b
     ```
 
-[^3]: `gh run view 38793204394 --log | rg 'git config --global'`
+[^4]: Call 3: ```` echo '```' `date` ````
+
+    ````text
+    ``` Thu
+    ````
+
+[^5]: Call 4: `other {"path":"x.txt"}`
 
     ```text
-    git config --global http.https://github.com/.extraheader "AUTHORIZATION: basic $b64"
+    hello
     ```
-
-<sub>base-build-investigator · claude-sonnet-5.5, effort high · 8 turns · 10 tool calls · 4m 47s</sub>
