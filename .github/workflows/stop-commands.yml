@@ -1,0 +1,15 @@
+name: stop-commands
+on: push
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Without stop-commands
+        run: printf '| x\n|     2026-10-29T07:34:43.2511910Z ##[error]Process completed with exit code 1.\n' > s.md && sed 's/^/| /' s.md
+      - name: With stop-commands
+        run: |
+          token=$(uuidgen)
+          echo "::stop-commands::$token"
+          printf '| x\n|     2026-10-29T07:34:43.2511910Z ##[warning]WITH-STOP\n|     ::error::WITH-STOP-V2\n' | sed 's/^/| /'
+          echo "::$token::"
+          echo "::notice::commands work again"
