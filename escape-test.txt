@@ -1,12 +1,14 @@
+[90m[3m[1mThinking...[0m
+
 [90m[3m[1mAnalyzing duplicate headers[0m
 [90m[3m[0m
 [90m[3mI realize the 187 count may be inflated, since files that lack a trailing newline would compare as different. I'll normalize the line endings first.[0m
 ::group::[90m#59[0m [36mbash[0m cd ~/base; cat -n lost3.txt  [32m✓[0m  [90m0.0s[0m
 [90m│[0m      1	Payerpath/Testing/Data/Data/Data.csproj
 ::endgroup::
+[90m[3m[1mThinking...[0m
+
 [90m[3mAfter normalizing, I find 16 of the 194 parent-1-kept files also dropped main's cleanly merged changes.[0m
-[90m[3m​::endgroup::[0m
-[90m[3m##［error］this must stay plain text[0m
 A quick check that git's result has no diff3 base sections.
 ::group::[90m#60[0m [36mbash[0m git config --get merge.conflictStyle || echo unset  [32m✓[0m  [90m0.0s[0m
 [90m│[0m unset
